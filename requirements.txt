@@ -1,0 +1,6 @@
+pyproj
+django
+djangorestframework
+pandas
+requests
+haversine
