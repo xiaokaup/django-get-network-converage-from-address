@@ -12,23 +12,7 @@ python manage.py startapp [appName]
 ### Packages
 
 ```
-pip install -r requirements.txt
-```
-
-## View
-
-I use a variable `slice_network_coverage_data` to controle amount of data.
-
-## Route
-
-- `http://localhost:8000/network/post/`
-- `http://localhost:8000/network/post/async/`
-
-```json
-{
-  "id1": "CHEZ BREVAL, 29242 Ouessant", // Ok
-  "id2": "157 boulevard Mac Donald 75019 Paris" // No operators
-}
+pip install djangorestframework
 ```
 
 ## Goal
@@ -78,30 +62,39 @@ output:
 }
 ```
 
-## Async
+## Test
 
-```python
-import asyncio
+### Comparison Async vs sync
 
-async def async_task(number):
-    # Simulate an async task
-    await asyncio.sleep(1)
-    return f"Task {number} completed"
+#### Performance for sync:
 
-async def main():
-    # List of async tasks
-    tasks = [async_task(i) for i in range(5)]
-
-    # Run and wait for all tasks to complete (like Promise.all)
-    results = await asyncio.gather(*tasks)
-
-    for result in results:
-        print(result)
-
-# Run the main function
-asyncio.run(main())
+```bash
+ab -c 10 -n 100 -p test_input_post_data.json -T application/json http://127.0.0.1:8000/network/post/
 
 ```
+
+![](./assets/2024-03-30-img-1-test.png)
+
+#### Performance for Async:
+
+```bash
+ab -c 10 -n 100 -p test_input_post_data.json -T application/json http://127.0.0.1:8000/network/post/async/
+```
+
+![](./assets/2024-03-30-img-2-test.png)
+
+### Conclusion
+
+- The difference between the results of the Async and Sync methods is not large; Sometimes Sync takes about the same amount of time as Async, mainly because most of our code requires intensive computation.
+- Another reason is the Aysnc is not multithread, and cannot take advantage of the computational power of multi-core CPUs.
+
+### Optimisation
+
+Single user requests take longer, but the server can handle requests well under concurrent conditions. We can continue to optimize:
+
+- Use `aiohttp` instaed of `requests.get`
+- Reduced loops
+- `lamber93_to_gps` function is computationally intensive, consider pre-calcutating all the x, y in thefile into coordinate information. Sinci in real life, this information generally doesn't change very often.
 
 ## Resouce
 

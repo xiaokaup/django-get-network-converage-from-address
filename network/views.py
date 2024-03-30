@@ -1,11 +1,8 @@
 import os
 from typing import Dict, TypedDict, List
-from django.shortcuts import render
-from network.exceptions import BadResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import HttpResponse, JsonResponse
-from rest_framework.exceptions import NotFound
 from django.views.decorators.csrf import csrf_exempt
 import pandas as pd
 from django.conf import settings
@@ -15,7 +12,6 @@ from haversine import haversine
 from enum import Enum
 import json
 import asyncio
-from asgiref.sync import sync_to_async
 
 
 def iterate_data_generator(operateurs_data):
@@ -36,12 +32,6 @@ def read_csv_file_in_memory():
     )
 
     df = pd.read_csv(filePath)
-    # df.to_json(
-    #     outputPath,
-    #     orient="records",
-    # )
-    # csv_data = df.to_json(orient="records")
-    # return csv_data
     csv_data = df.to_dict(orient="records")
     return csv_data
 
@@ -196,7 +186,6 @@ def network_recoverage_messaure(request):
         return Response(coverage_result)
 
     except Exception as e:
-        # Log the exception
         print(f"Error occurred: {e}")
         return Response({"error": "An error occurred"}, status=500)
 
@@ -222,6 +211,5 @@ async def network_recoverage_messaure_async(request):
         return JsonResponse(coverage_result)
 
     except Exception as e:
-        # Log the exception
         print(f"Error occurred: {e}")
         return HttpResponse({"error": "An error occurred"}, status=500)
