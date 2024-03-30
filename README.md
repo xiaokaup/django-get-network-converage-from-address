@@ -15,26 +15,42 @@ python manage.py startapp [appName]
 pip install djangorestframework
 ```
 
+## View
+
+I use a variable `slice_network_coverage_data` to controle amount of data.
+
+## Route
+
+- `http://localhost:8000/network/post/`
+- `http://localhost:8000/network/post/async/`
+
+```json
+// The waiting time will be long if you use whole raw_network_coverage_data.csv data
+{
+  "id1": "CHEZ BREVAL, 29242 Ouessant",
+  "id2": "157 boulevard Mac Donald 75019 Paris",
+  "id4": "5 avenue Anatole France 75007 Paris",
+  "id5": "1 Bd de Parc, 77700 Coupvray",
+  "id6": "Place d'Armes, 78000 Versailles",
+  "id7": "17 Rue René Cassin, 51430 Bezannes",
+  "id8": "78 Le Poujol, 30125 L'Estréchure"
+}
+```
+
 ## Goal
 
 input
 
 ```json
-// This input have not relations with the raw_network_coverage_data.csv
 // The waiting time will be long if you use whole raw_network_coverage_data.csv data
-// {
-//   "id1": "157 boulevard Mac Donald 75019 Paris",
-//   "id4": "5 avenue Anatole France 75007 Paris",
-//   "id5": "1 Bd de Parc, 77700 Coupvray",
-//   "id6": "Place d'Armes, 78000 Versailles",
-//   "id7": "17 Rue René Cassin, 51430 Bezannes",
-//   "id8": "78 Le Poujol, 30125 L'Estréchure"
-// }
-
-// Try to test this input
 {
-  "id1": "CHEZ BREVAL, 29242 Ouessant", // Ok
-  "id2": "157 boulevard Mac Donald 75019 Paris" // No operators
+  "id1": "CHEZ BREVAL, 29242 Ouessant",
+  "id2": "157 boulevard Mac Donald 75019 Paris",
+  "id4": "5 avenue Anatole France 75007 Paris",
+  "id5": "1 Bd de Parc, 77700 Coupvray",
+  "id6": "Place d'Armes, 78000 Versailles",
+  "id7": "17 Rue René Cassin, 51430 Bezannes",
+  "id8": "78 Le Poujol, 30125 L'Estréchure"
 }
 ```
 
@@ -53,7 +69,7 @@ output:
     "SFR": { "2G": true, "3G": true, "4G": true },
     "bouygues": { "2G": true, "3G": true, "4G": false }
   },
-  "id4": {
+  "id2": {
     "orange": { "2G": true, "3G": true, "4G": false },
     "bouygues": { "2G": true, "3G": false, "4G": false },
     "SFR": { "2G": true, "3G": true, "4G": false }
